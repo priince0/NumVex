@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NumVex — Modern Number System & Radix Suite (Bases 2–9999)</title>
+  <meta name="description" content="High-precision number system converter, deep Radix Cosmos (Base 2 to 9999), step-by-step calculator with LaTeX export, IEEE-754 32/64-bit float analyzer, Gray code, BCD, and bitwise logic lab.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">
+          <i data-lucide="binary" style="width: 24px; height: 24px;"></i>
+        </div>
+        <div class="brand-info">
+          <h1>NumVex</h1>
+          <p>Modern Number System, Radix & Computer Arithmetic Suite</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <!-- Theme Toggle -->
+        <button id="themeToggleBtn" class="btn-icon" title="Toggle Light/Dark Theme" aria-label="Toggle Theme">
+          <i data-lucide="sun" id="themeIcon" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tab-navigation">
+      <button class="tab-btn active" data-tab="omnibase">
+        <i data-lucide="layout-grid" style="width: 16px; height: 16px;"></i>
+        OmniBase Hub
+      </button>
+      <button class="tab-btn" data-tab="cosmos">
+        <i data-lucide="orbit" style="width: 16px; height: 16px; color: var(--accent-rose);"></i>
+        🪐 Radix Cosmos (2–9999)
+      </button>
+      <button class="tab-btn" data-tab="explainer">
+        <i data-lucide="calculator" style="width: 16px; height: 16px;"></i>
+        Step-by-Step Explainer
+      </button>
+      <button class="tab-btn" data-tab="bitboard">
+        <i data-lucide="cpu" style="width: 16px; height: 16px;"></i>
+        Bit Board & Register
+      </button>
+      <button class="tab-btn" data-tab="ieee754">
+        <i data-lucide="gauge" style="width: 16px; height: 16px;"></i>
+        IEEE-754 Float (32/64b)
+      </button>
+      <button class="tab-btn" data-tab="bitwise">
+        <i data-lucide="binary" style="width: 16px; height: 16px;"></i>
+        Bitwise Operations Lab
+      </button>
+      <button class="tab-btn" data-tab="ascii">
+        <i data-lucide="type" style="width: 16px; height: 16px;"></i>
+        Text & ASCII / UTF-8
+      </button>
+    </nav>
+
+    <!-- Quick Presets Bar (OmniBase tab) -->
+    <div class="presets-bar" id="presetsBar">
+      <span class="presets-label">
+        <i data-lucide="sparkles" style="width: 14px; height: 14px;"></i>
+        Presets:
+      </span>
+      <button class="preset-chip" data-preset="42">42 (Answer)</button>
+      <button class="preset-chip" data-preset="255">255 (0xFF)</button>
+      <button class="preset-chip" data-preset="1000">1,000 (Base64 Po)</button>
+      <button class="preset-chip" data-preset="1000000">1,000,000 (1M)</button>
+      <button class="preset-chip" data-preset="1024">1,024 (1 KiB)</button>
+      <button class="preset-chip" data-preset="65535">65,535 (16-bit max)</button>
+      <button class="preset-chip" data-preset="3735928559">0xDEADBEEF</button>
+      <button class="preset-chip" data-preset="4294967295">4,294,967,295 (32-bit)</button>
+      <button class="preset-chip" data-preset="10.6875">10.6875 (Fraction)</button>
+      <button class="preset-chip" data-preset="3.14159">3.14159 (π)</button>
+    </div>
+
+    <!-- ====================================================================
+         TAB 1: OMNIBASE CONVERTER
+         ==================================================================== -->
+    <main id="tab-omnibase" class="tab-content">
+      <div class="converter-grid">
+        <!-- Decimal (Base 10) -->
+        <div class="card" id="card-dec">
+          <div class="card-header">
+            <span class="badge-base badge-dec">
+              <i data-lucide="hash" style="width: 14px; height: 14px;"></i>
+              Decimal (Base 10)
+            </span>
+            <div class="card-actions">
+              <button class="btn-card-action btn-sign" data-target="input-dec" title="Toggle Positive / Negative (±)">±</button>
+              <button class="btn-card-action btn-copy" data-target="input-dec" title="Copy to clipboard">
+                <i data-lucide="copy" style="width: 15px; height: 15px;"></i>
+              </button>
+              <button class="btn-card-action btn-clear" data-target="input-dec" title="Clear">
+                <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+              </button>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <input type="text" id="input-dec" class="base-input" placeholder="e.g. 255 or 1000000" autocomplete="off" spellcheck="false" data-radix="10">
+            <button class="btn-scroll-arrow btn-scroll-left hidden" data-target="input-dec" title="Scroll to start (◄)" type="button">‹</button>
+            <button class="btn-scroll-arrow btn-scroll-right hidden" data-target="input-dec" title="Scroll to end (►)" type="button">›</button>
+          </div>
+          <div class="card-meta">
+            <div class="meta-stats">
+              <span id="stat-dec-digits">0 digits</span>
+            </div>
+            <button class="btn-toggle-group" data-base="10">Group (1,234)</button>
+          </div>
+        </div>
+
+        <!-- Binary (Base 2) -->
+        <div class="card" id="card-bin">
+          <div class="card-header">
+            <span class="badge-base badge-bin">
+              <i data-lucide="binary" style="width: 14px; height: 14px;"></i>
+              Binary (Base 2)
+            </span>
+            <div class="card-actions">
+              <button class="btn-card-action btn-sign" data-target="input-bin" title="Toggle Positive / Negative (±)">±</button>
+              <button class="btn-card-action btn-copy" data-target="input-bin" title="Copy to clipboard">
+                <i data-lucide="copy" style="width: 15px; height: 15px;"></i>
+              </button>
+              <button class="btn-card-action btn-clear" data-target="input-bin" title="Clear">
+                <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+              </button>
+            </div>
+          </div>
+          <div class="input-wrapper input-scroll-wrapper" id="binScrollWrapper">
+            <input type="text" id="input-bin" class="base-input" placeholder="e.g. 11111111 or 1010.1011" autocomplete="off" spellcheck="false" data-radix="2">
+            <button class="btn-scroll-arrow btn-scroll-left hidden" data-target="input-bin" title="Scroll to start (◄)" type="button">‹</button>
+            <button class="btn-scroll-arrow btn-scroll-right hidden" data-target="input-bin" title="Scroll to end (►)" type="button">›</button>
+          </div>
+
+          <!-- Interactive Binary Bit Scrubber Slider (Slide smoothly through large binary sequences) -->
+          <div class="bit-slider-container" id="binSliderContainer">
+            <div class="bit-slider-header">
+              <span class="bit-slider-label">
+                <i data-lucide="sliders-horizontal" style="width: 12px; height: 12px; color: var(--bin-color);"></i>
+                Bit Scrubber:
+              </span>
+              <span class="bit-slider-pos" id="binSliderPos">◄ MSB · Slide Bits · LSB ►</span>
+            </div>
+            <div class="bit-slider-track-wrap">
+              <button class="btn-scrub-edge" id="btnScrubMSB" type="button" title="Jump to Most Significant Bit (MSB)">◄ MSB</button>
+              <input type="range" id="binScroller" min="0" max="100" value="0" class="bit-scrubber-slider" title="Drag to slide through binary bits">
+              <button class="btn-scrub-edge" id="btnScrubLSB" type="button" title="Jump to Least Significant Bit (LSB)">LSB ►</button>
+            </div>
+          </div>
+
+          <div class="card-meta">
+            <div class="meta-stats">
+              <span id="stat-bin-bits">0 bits</span>
+            </div>
+            <button class="btn-toggle-group" data-base="2">Group (1111 0000)</button>
+          </div>
+        </div>
+
+        <!-- Hexadecimal (Base 16) -->
+        <div class="card" id="card-hex">
+          <div class="card-header">
+            <span class="badge-base badge-hex">
+              <i data-lucide="code" style="width: 14px; height: 14px;"></i>
+              Hexadecimal (Base 16)
+            </span>
+            <div class="card-actions">
+              <button class="btn-card-action btn-sign" data-target="input-hex" title="Toggle Positive / Negative (±)">±</button>
+              <button class="btn-card-action btn-copy" data-target="input-hex" title="Copy to clipboard">
+                <i data-lucide="copy" style="width: 15px; height: 15px;"></i>
+              </button>
+              <button class="btn-card-action btn-clear" data-target="input-hex" title="Clear">
+                <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+              </button>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <input type="text" id="input-hex" class="base-input" placeholder="e.g. FF or 0xDEADBEEF" autocomplete="off" spellcheck="false" data-radix="16">
+            <button class="btn-scroll-arrow btn-scroll-left hidden" data-target="input-hex" title="Scroll to start (◄)" type="button">‹</button>
+            <button class="btn-scroll-arrow btn-scroll-right hidden" data-target="input-hex" title="Scroll to end (►)" type="button">›</button>
+          </div>
+          <div class="card-meta">
+            <div class="meta-stats">
+              <span id="stat-hex-digits">0 hex digits</span>
+            </div>
+            <button class="btn-toggle-group" data-base="16">Group (FF 0A)</button>
+          </div>
+        </div>
+
+        <!-- Octal (Base 8) -->
+        <div class="card" id="card-oct">
+          <div class="card-header">
+            <span class="badge-base badge-oct">
+              <i data-lucide="circle-dot" style="width: 14px; height: 14px;"></i>
+              Octal (Base 8)
+            </span>
+            <div class="card-actions">
+              <button class="btn-card-action btn-sign" data-target="input-oct" title="Toggle Positive / Negative (±)">±</button>
+              <button class="btn-card-action btn-copy" data-target="input-oct" title="Copy to clipboard">
+                <i data-lucide="copy" style="width: 15px; height: 15px;"></i>
+              </button>
+              <button class="btn-card-action btn-clear" data-target="input-oct" title="Clear">
+                <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+              </button>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <input type="text" id="input-oct" class="base-input" placeholder="e.g. 377" autocomplete="off" spellcheck="false" data-radix="8">
+            <button class="btn-scroll-arrow btn-scroll-left hidden" data-target="input-oct" title="Scroll to start (◄)" type="button">‹</button>
+            <button class="btn-scroll-arrow btn-scroll-right hidden" data-target="input-oct" title="Scroll to end (►)" type="button">›</button>
+          </div>
+          <div class="card-meta">
+            <div class="meta-stats">
+              <span id="stat-oct-digits">0 digits</span>
+            </div>
+            <button class="btn-toggle-group" data-base="8">Group (377 123)</button>
+          </div>
+        </div>
+
+        <!-- Custom Base (Expanded: Base 2 through 9999) -->
+        <div class="card" id="card-custom">
+          <div class="card-header">
+            <span class="badge-base badge-custom">
+              <i data-lucide="sliders" style="width: 14px; height: 14px;"></i>
+              Custom Base (<span id="customBaseLabel">Base 9999</span>)
+            </span>
+            <div class="card-actions">
+              <button class="btn-card-action btn-sign" data-target="input-custom" title="Toggle Positive / Negative (±)">±</button>
+              <button class="btn-card-action btn-copy" data-target="input-custom" title="Copy to clipboard">
+                <i data-lucide="copy" style="width: 15px; height: 15px;"></i>
+              </button>
+              <button class="btn-card-action btn-clear" data-target="input-custom" title="Clear">
+                <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Famous Radix Leap Bar -->
+          <div class="famous-radix-quick-bar">
+            <span style="font-size: 0.7rem; color: var(--text-muted); align-self: center;">Quick:</span>
+            <button class="famous-radix-pill" data-radix="12">Base 12</button>
+            <button class="famous-radix-pill" data-radix="16">Base 16</button>
+            <button class="famous-radix-pill" data-radix="60">Base 60</button>
+            <button class="famous-radix-pill" data-radix="64">Base 64</button>
+            <button class="famous-radix-pill" data-radix="256">Base 256</button>
+            <button class="famous-radix-pill" data-radix="1000">Base 1000</button>
+            <button class="famous-radix-pill" data-radix="1024">Base 1024</button>
+            <button class="famous-radix-pill" data-radix="4096">Base 4096</button>
+            <button class="famous-radix-pill active" data-radix="9999">Base 9999 ⚡</button>
+          </div>
+
+          <div class="custom-base-controls">
+            <label for="radixSlider" style="font-size: 0.78rem; color: var(--text-secondary);">Radix (2–9999):</label>
+            <input type="range" id="radixSlider" min="2" max="9999" value="9999" class="radix-slider">
+            <input type="number" id="radixNumberInput" min="2" max="9999" value="9999" class="radix-number-input">
+          </div>
+          <div class="input-wrapper">
+            <input type="text" id="input-custom" class="base-input" placeholder="e.g. [1][2][1] or 1:2:1" autocomplete="off" spellcheck="false" data-radix="9999">
+            <button class="btn-scroll-arrow btn-scroll-left hidden" data-target="input-custom" title="Scroll to start (◄)" type="button">‹</button>
+            <button class="btn-scroll-arrow btn-scroll-right hidden" data-target="input-custom" title="Scroll to end (►)" type="button">›</button>
+          </div>
+          <div class="card-meta">
+            <span id="customAlphabetHint">Format: [d_k]...[d_0] where digits are 0–9998</span>
+            <button id="btnJumpToCosmos" class="btn-toggle-group" style="color: var(--accent-rose); border-color: rgba(244, 63, 94, 0.4);">
+              Explore in Cosmos 🪐
+            </button>
+          </div>
+        </div>
+
+        <!-- Roman Numerals -->
+        <div class="card" id="card-roman">
+          <div class="card-header">
+            <span class="badge-base badge-roman">
+              <i data-lucide="landmark" style="width: 14px; height: 14px;"></i>
+              Roman Numerals (1 - 3,999)
+            </span>
+            <div class="card-actions">
+              <button class="btn-card-action btn-copy" data-target="input-roman" title="Copy to clipboard">
+                <i data-lucide="copy" style="width: 15px; height: 15px;"></i>
+              </button>
+              <button class="btn-card-action btn-clear" data-target="input-roman" title="Clear">
+                <i data-lucide="x" style="width: 15px; height: 15px;"></i>
+              </button>
+            </div>
+          </div>
+          <div class="input-wrapper">
+            <input type="text" id="input-roman" class="base-input" placeholder="e.g. MMXXVI or 2026" autocomplete="off" spellcheck="false">
+          </div>
+          <div class="card-meta">
+            <span>Standard subtractive notation (I, V, X, L, C, D, M)</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         TAB 2: 🪐 RADIX COSMOS (DEEP HIGH-RADIX EXPLORER 2 - 9999)
+         ==================================================================== -->
+    <main id="tab-cosmos" class="tab-content hidden">
+      <div class="cosmos-container">
+        <!-- Hero Card -->
+        <div class="cosmos-hero-card">
+          <div class="cosmos-meta-badge">
+            <i data-lucide="orbit" style="width: 16px; height: 16px;"></i>
+            Positional Radix Cosmos: Base 2 through 9999
+          </div>
+          <h2 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 0.4rem; letter-spacing: -0.02em;">
+            Beyond Human Convention: Positional Systems Up to Base 9999
+          </h2>
+          <p style="color: var(--text-secondary); font-size: 0.9rem; max-width: 900px; line-height: 1.55;">
+            In high-radix positional systems ($B > 36$), each single digit is a numeric magnitude $0 \le d < B$, represented universally via bracketed notation $[d_k]\dots[d_0]$ or sexagesimal colons. Explore how numbers morph, compress, and behave across historical, computing, and extreme bases up to Base 9999.
+          </p>
+        </div>
+
+        <!-- Famous Radices Carousel Grid -->
+        <div>
+          <div style="font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 0.65rem;">
+            Famous & Historical Radices:
+          </div>
+          <div class="famous-grid" id="famousGrid"></div>
+        </div>
+
+        <!-- Giant Radix Spectrum Slider & Value Input -->
+        <div class="radix-spectrum-control">
+          <div class="spectrum-header">
+            <div class="spectrum-base-display">
+              <span style="font-size: 0.9rem; color: var(--text-secondary);">Active Radix:</span>
+              <span class="spectrum-base-number" id="cosmosBaseNumber">Base 9999</span>
+              <span id="cosmosBaseCategory" style="font-size: 0.8rem; background: rgba(244, 63, 94, 0.15); color: var(--accent-rose); padding: 0.2rem 0.6rem; border-radius: 12px; font-weight: 600;">
+                Extreme Radix
+              </span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+              <label for="cosmosBaseInput" style="font-size: 0.82rem; color: var(--text-secondary);">Direct Radix (2–9999):</label>
+              <input type="number" id="cosmosBaseInput" min="2" max="9999" value="9999" class="radix-number-input" style="width: 80px;">
+            </div>
+          </div>
+
+          <div class="spectrum-slider-wrapper">
+            <input type="range" id="cosmosSlider" min="2" max="9999" value="9999" class="spectrum-slider">
+            <div class="spectrum-ticks">
+              <span>Base 2</span>
+              <span>Base 64</span>
+              <span>Base 256</span>
+              <span>Base 1024</span>
+              <span>Base 4096</span>
+              <span>Base 9999 (Zenith)</span>
+            </div>
+          </div>
+
+          <div id="cosmosHistoricalNote" style="font-size: 0.85rem; color: var(--text-secondary); background: var(--bg-input); padding: 0.75rem 1rem; border-radius: var(--radius-md); border-left: 3px solid var(--accent-rose);">
+          </div>
+
+          <!-- Value Input / Sync Row -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+            <div>
+              <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">Decimal Integer to Encode:</label>
+              <input type="text" id="cosmosDecInput" class="base-input" value="1000000" placeholder="Enter integer...">
+            </div>
+            <div>
+              <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">Radix Representation Output:</label>
+              <input type="text" id="cosmosEncodedOut" class="base-input" readonly style="color: var(--accent-rose); font-weight: 700;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Positional Abacus / Tower -->
+        <div class="abacus-section">
+          <div class="abacus-header">
+            <div>
+              <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem;">
+                <i data-lucide="layers" style="width: 18px; height: 18px; color: var(--accent-cyan);"></i>
+                Interactive Positional Decomposition & Tower
+              </h3>
+              <p style="font-size: 0.82rem; color: var(--text-secondary);">
+                Every column represents a power of the base ($B^{\text{pos}}$). Use the <kbd>+</kbd> and <kbd>-</kbd> buttons or type a digit directly ($0 \le d < B$) to modify its contribution!
+              </p>
+            </div>
+          </div>
+
+          <div class="abacus-columns-scroll" id="abacusColumnsRow"></div>
+        </div>
+
+        <!-- Number Theory & Radix Metrics Dashboard -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-title">
+              <i data-lucide="hash" style="width: 14px; height: 14px; color: var(--accent-purple);"></i>
+              Prime Factorization
+            </div>
+            <div class="metric-val text-purple" id="metricFactorization">3³ × 37</div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;" id="metricFactorizationDesc">
+              Prime factors govern which fractions produce terminating vs repeating expansions.
+            </p>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-title">
+              <i data-lucide="pie-chart" style="width: 14px; height: 14px; color: var(--accent-emerald);"></i>
+              Information Density & Bits / Digit
+            </div>
+            <div class="metric-val text-emerald" id="metricInfoDensity">13.29 bits / digit</div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;" id="metricCompressionDesc">
+              1 digit in Base 9999 stores over 13.28 bits of raw binary information.
+            </p>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-title">
+              <i data-lucide="minimize-2" style="width: 14px; height: 14px; color: var(--accent-blue);"></i>
+              Spatial Compression vs Decimal
+            </div>
+            <div class="metric-val text-blue" id="metricSpatialCompression">57% shorter</div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">
+              Compared to standard decimal notation length.
+            </p>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-title">
+              <i data-lucide="check-circle-2" style="width: 14px; height: 14px; color: var(--accent-amber);"></i>
+              Terminating Unit Fractions
+            </div>
+            <div class="metric-val text-amber" id="metricTerminatingFractions">1/3, 1/9, 1/27, 1/37</div>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem;">
+              Unit fractions $1/n$ whose denominators divide powers of the base terminate finitely.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         TAB 3: STEP-BY-STEP EXPLAINER (WITH LATEX & MARKDOWN EXPORT)
+         ==================================================================== -->
+    <main id="tab-explainer" class="tab-content hidden">
+      <div class="explainer-container">
+        <!-- Explainer Controls -->
+        <div class="explainer-controls">
+          <div>
+            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">From Base:</label>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <select id="explainSrcBase" class="select-base" style="flex: 1;">
+                <option value="10" selected>Decimal (Base 10)</option>
+                <option value="2">Binary (Base 2)</option>
+                <option value="16">Hexadecimal (Base 16)</option>
+                <option value="8">Octal (Base 8)</option>
+                <option value="64">Base 64 (RFC 4648 / 6-bit)</option>
+                <option value="60">Base 60 (Babylonian)</option>
+                <option value="100">Base 100 (Centimal)</option>
+                <option value="256">Base 256 (IPv4 Octet)</option>
+                <option value="1024">Base 1024 (Binary Kibi / IEC)</option>
+                <option value="9999">Base 9999 (Tetradigital Zenith)</option>
+                <option value="custom">Custom Base (2–9999)...</option>
+              </select>
+              <input type="number" id="explainCustomSrc" min="2" max="9999" value="12" class="radix-number-input hidden" style="width: 75px;" title="Custom Source Base">
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center; align-items: center; margin-top: 1.25rem;">
+            <button id="btnSwapExplainBases" class="btn-icon" title="Swap Source & Target Base">
+              <i data-lucide="arrow-left-right" style="width: 16px; height: 16px;"></i>
+            </button>
+          </div>
+
+          <div>
+            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">To Base:</label>
+            <div style="display: flex; gap: 0.5rem; align-items: center;">
+              <select id="explainTgtBase" class="select-base" style="flex: 1;">
+                <option value="64" selected>Base 64 (RFC 4648 / 6-bit)</option>
+                <option value="2">Binary (Base 2)</option>
+                <option value="8">Octal (Base 8)</option>
+                <option value="10">Decimal (Base 10)</option>
+                <option value="16">Hexadecimal (Base 16)</option>
+                <option value="60">Base 60 (Babylonian)</option>
+                <option value="256">Base 256 (IPv4 Octet)</option>
+                <option value="1024">Base 1024 (Binary Kibi / IEC)</option>
+                <option value="9999">Base 9999 (Tetradigital Zenith)</option>
+                <option value="custom">Custom Base (2–9999)...</option>
+              </select>
+              <input type="number" id="explainCustomTgt" min="2" max="9999" value="64" class="radix-number-input hidden" style="width: 75px;" title="Custom Target Base">
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">Value to Convert:</label>
+            <input type="text" id="explainInput" class="base-input" value="1000" placeholder="Enter number...">
+          </div>
+        </div>
+
+        <!-- Explainer Results View -->
+        <div class="explainer-output-card" id="explainerOutputCard">
+          <div id="explainContent"></div>
+
+          <!-- Academic & Documentation Export Bar -->
+          <div class="explainer-action-bar">
+            <span style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem;">
+              <i data-lucide="file-text" style="width: 14px; height: 14px;"></i> Export Derivation:
+            </span>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button class="btn-export" id="btnExportLaTeX" title="Copy LaTeX Formula for Papers / Overleaf">
+                <i data-lucide="code" style="width: 14px; height: 14px;"></i> Copy LaTeX ($)
+              </button>
+              <button class="btn-export" id="btnExportMarkdown" title="Copy Markdown Table for Notes">
+                <i data-lucide="file-code" style="width: 14px; height: 14px;"></i> Copy Markdown
+              </button>
+              <button class="btn-export" id="btnPrintExplainer" title="Print or Save PDF Calculation Sheet">
+                <i data-lucide="printer" style="width: 14px; height: 14px;"></i> Print / Save PDF
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         TAB 4: INTERACTIVE BIT REGISTER & ARCHITECT (WITH GRAY CODE & BCD)
+         ==================================================================== -->
+    <main id="tab-bitboard" class="tab-content hidden">
+      <div class="bitboard-container">
+        <!-- Toolbar -->
+        <div class="bitboard-toolbar">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);">Register Width:</span>
+            <div class="width-selector">
+              <button class="width-btn" data-width="8">8-bit</button>
+              <button class="width-btn" data-width="16">16-bit</button>
+              <button class="width-btn active" data-width="32">32-bit</button>
+              <button class="width-btn" data-width="64">64-bit</button>
+            </div>
+          </div>
+
+          <div class="bit-actions">
+            <button class="btn-secondary" id="btnInvertBits" title="Bitwise NOT (Toggle all bits)">
+              <i data-lucide="shuffle" style="width: 14px; height: 14px;"></i>
+              Invert (NOT)
+            </button>
+            <button class="btn-secondary" id="btnShiftLeftBits" title="Logical Shift Left (<< 1)">
+              <i data-lucide="arrow-left" style="width: 14px; height: 14px;"></i>
+              Shift Left
+            </button>
+            <button class="btn-secondary" id="btnShiftRightBits" title="Logical Shift Right (>> 1)">
+              <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+              Shift Right
+            </button>
+            <button class="btn-secondary" id="btnClearAllBits">
+              <i data-lucide="rotate-ccw" style="width: 14px; height: 14px;"></i>
+              Clear (0)
+            </button>
+            <button class="btn-secondary" id="btnSetAllBits">
+              <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+              Set All (1)
+            </button>
+          </div>
+        </div>
+
+        <!-- Interactive Clickable Bit Grid -->
+        <div class="bit-grid-wrapper">
+          <div id="bitGridRow" class="nibble-row"></div>
+        </div>
+
+        <!-- Decoded Register Interpretation -->
+        <div class="decoded-values-grid">
+          <div class="decoded-card">
+            <div class="decoded-title">Unsigned Integer</div>
+            <div class="decoded-val text-blue" id="regUnsignedVal">0</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Signed (Two's Complement)</div>
+            <div class="decoded-val text-emerald" id="regSignedVal">0</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Hexadecimal</div>
+            <div class="decoded-val text-purple" id="regHexVal">0x00000000</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Octal</div>
+            <div class="decoded-val text-amber" id="regOctVal">0o0</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Gray Code (Reflected Binary)</div>
+            <div class="decoded-val text-cyan" id="regGrayVal" style="font-size: 1rem;">0000 0000 ...</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">BCD (Binary-Coded Decimal 8421)</div>
+            <div class="decoded-val text-rose" id="regBcdVal" style="font-size: 1rem;">0000</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Endianness (Big-Endian)</div>
+            <div class="decoded-val" id="regBigEndianVal" style="font-size: 1rem;">00 00 00 00</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Endianness (Little-Endian)</div>
+            <div class="decoded-val" id="regLittleEndianVal" style="font-size: 1rem;">00 00 00 00</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         TAB 5: IEEE-754 SINGLE (32b) & DOUBLE (64b) PRECISION ANALYZER
+         ==================================================================== -->
+    <main id="tab-ieee754" class="tab-content hidden">
+      <div class="ieee-container">
+        <div class="ieee-input-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+            <div>
+              <h3 style="margin-bottom: 0.35rem; font-size: 1.25rem;">IEEE-754 Floating Point Hardware Analyzer</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Inspect IEEE-754 hardware encoding across 32-bit Single Precision and 64-bit Double Precision.
+              </p>
+            </div>
+            <!-- Precision Switcher -->
+            <div class="precision-toggle-bar">
+              <button class="precision-btn active" data-precision="32">32-bit Single (float)</button>
+              <button class="precision-btn" data-precision="64">64-bit Double (double)</button>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 1rem;">
+            <div>
+              <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">Decimal Float Input:</label>
+              <input type="text" id="ieeeDecInput" class="base-input" value="12.375" placeholder="e.g. 12.375 or -0.15625">
+            </div>
+            <div>
+              <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;" id="ieeeHexInputLabel">Hexadecimal Representation (32-bit):</label>
+              <input type="text" id="ieeeHexInput" class="base-input" value="0x41460000" placeholder="e.g. 0x41460000">
+            </div>
+          </div>
+
+          <!-- Color Coded Bit Strip -->
+          <div class="ieee-parts-strip-wrapper">
+            <div class="ieee-parts-strip">
+              <div class="ieee-sign-segment" id="ieeeSignBox">
+                <div style="font-size: 0.68rem; opacity: 0.8;">SIGN (1b)</div>
+                <div id="ieeeSignBit" style="font-size: 1.2rem;">0</div>
+              </div>
+              <div class="ieee-exp-segment" id="ieeeExpBox">
+                <div style="font-size: 0.68rem; opacity: 0.8;" id="ieeeExpLabel">BIASED EXPONENT (8b / Bias 127)</div>
+                <div id="ieeeExpBits" style="font-size: 1.15rem;">10000010</div>
+              </div>
+              <div class="ieee-mant-segment" id="ieeeMantBox">
+                <div style="font-size: 0.68rem; opacity: 0.8;" id="ieeeMantLabel">MANTISSA / FRACTION (23b)</div>
+                <div id="ieeeMantBits" style="font-size: 1.15rem;">10001100000000000000000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Decoded breakdown details -->
+          <div class="ieee-formula-card" id="ieeeBreakdownCard"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         TAB 6: BITWISE OPERATIONS LAB
+         ==================================================================== -->
+    <main id="tab-bitwise" class="tab-content hidden">
+      <div class="bitwise-container">
+        <div class="card">
+          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;">Interactive Bitwise Operations Lab</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1.25rem;">
+            Perform hardware bitwise operations with aligned bit truth visualization and signed/unsigned output.
+          </p>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div>
+              <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">Operand A (Decimal or 0x Hex):</label>
+              <input type="text" id="bitwiseInputA" class="base-input" value="12">
+            </div>
+            <div>
+              <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">Operand B (Decimal or 0x Hex):</label>
+              <input type="text" id="bitwiseInputB" class="base-input" value="10">
+            </div>
+          </div>
+
+          <!-- Operator Buttons -->
+          <div class="bitwise-operators-row" id="bitwiseOperatorsRow">
+            <button class="op-btn active" data-op="AND">AND (&)</button>
+            <button class="op-btn" data-op="OR">OR (|)</button>
+            <button class="op-btn" data-op="XOR">XOR (^)</button>
+            <button class="op-btn" data-op="NOT">NOT (~A)</button>
+            <button class="op-btn" data-op="NAND">NAND</button>
+            <button class="op-btn" data-op="NOR">NOR</button>
+            <button class="op-btn" data-op="XNOR">XNOR</button>
+            <button class="op-btn" data-op="SHL">Shift Left (&lt;&lt;)</button>
+            <button class="op-btn" data-op="SHR">Shift Right (&gt;&gt;&gt;)</button>
+          </div>
+
+          <!-- Aligned Visualization -->
+          <div class="bitwise-visualization" id="bitwiseVisBlock"></div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====================================================================
+         TAB 7: TEXT & ASCII / UTF-8 ENCODER
+         ==================================================================== -->
+    <main id="tab-ascii" class="tab-content hidden">
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <h3 style="font-size: 1.25rem; margin-bottom: 0.25rem;">Text & ASCII / UTF-8 Byte Inspector</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary);">
+              Encode arbitrary text strings into raw byte streams and inspect full ASCII code tables.
+            </p>
+          </div>
+          <button class="btn-secondary" id="btnOpenAsciiModal" style="color: var(--accent-cyan); border-color: rgba(6, 182, 212, 0.4);">
+            <i data-lucide="table" style="width: 15px; height: 15px;"></i> Open Full 128 ASCII Matrix
+          </button>
+        </div>
+
+        <div style="margin-bottom: 1.25rem;">
+          <label style="font-size: 0.78rem; color: var(--text-secondary); display: block; margin-bottom: 0.35rem;">Text String:</label>
+          <input type="text" id="asciiTextInput" class="base-input" value="Hello World!" placeholder="Type any text or emoji...">
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+          <div class="decoded-card">
+            <div class="decoded-title">Hex Bytes</div>
+            <div class="decoded-val text-purple" id="asciiHexOut" style="font-size: 1rem;">48 65 6C 6C 6F 20 57 6F 72 6C 64 21</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Binary Bytes (8-bit)</div>
+            <div class="decoded-val text-emerald" id="asciiBinOut" style="font-size: 0.88rem;">01001000 01100101 ...</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Decimal ASCII Codes</div>
+            <div class="decoded-val text-blue" id="asciiDecOut" style="font-size: 1rem;">72 101 108 108 111 32 87 111 114 108 100 33</div>
+          </div>
+          <div class="decoded-card">
+            <div class="decoded-title">Total Byte Length</div>
+            <div class="decoded-val text-amber" id="asciiByteLength">12 bytes</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <div>
+        <strong>NumVex</strong> &mdash; Crafted with precision for computer science students, software engineers, and digital systems architects.
+      </div>
+      <div>
+        Keyboard shortcut: <kbd style="background: var(--bg-card); padding: 0.15rem 0.4rem; border-radius: 4px; border: 1px solid var(--border-subtle);">Esc</kbd> to clear inputs
+      </div>
+    </footer>
+  </div>
+
+  <!-- ASCII Character Matrix Modal -->
+  <div class="modal-overlay hidden" id="asciiModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="table" style="width: 18px; height: 18px; color: var(--accent-cyan);"></i>
+          <h3 style="font-size: 1.15rem; font-weight: 700;">Full 128 Standard ASCII Character & Control Matrix</h3>
+        </div>
+        <button class="btn-card-action" id="btnCloseAsciiModal" title="Close">
+          <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="asciiModalSearch" class="ascii-search-bar" placeholder="Filter by character, hex (0x0A), decimal code (10), or name (LF, CR, Space)...">
+        <div class="math-table-wrapper" style="max-height: 55vh;">
+          <table class="math-table" id="asciiMatrixTable">
+            <thead>
+              <tr>
+                <th>Dec</th>
+                <th>Hex</th>
+                <th>Octal</th>
+                <th>Binary (8b)</th>
+                <th>Glyph</th>
+                <th>Description / Control Function</th>
+              </tr>
+            </thead>
+            <tbody id="asciiMatrixTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="js/converter.js"></script>
+  <script src="js/steps.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
