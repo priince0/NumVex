@@ -217,7 +217,7 @@ This project is open-source under the [MIT License](LICENSE).
 
 <div align="center">
 
-Made with precision by **[Prince Rabadiya](https://github.com/priince0)**
+Made with precision by **[@priince0](https://github.com/priince0)**
 
 ⭐ **If you find NumVex useful, please consider starring the repository!**
 
