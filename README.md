@@ -1,123 +1,224 @@
-# NumVex — High-Precision Number System & Computer Arithmetic Suite
+<div align="center">
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Vanilla JS](https://img.shields.io/badge/Dependencies-Zero%20(Pure%20Vanilla%20JS)-emerald.svg)]()
-[![Platform](https://img.shields.io/badge/Platform-Web%20(Client--Side)-indigo.svg)]()
-[![Precision](https://img.shields.io/badge/Precision-Arbitrary%20BigInt-amber.svg)]()
+# ⚡ NumVex
 
-**NumVex** is an open-source, client-side workstation for positional numeral systems, arbitrary-radix arithmetic, and computer hardware representations. It provides bidirectional conversions across standard bases and arbitrary radices from **Base 2 up to Base 9999**, complete with step-by-step mathematical derivations, an interactive 64-bit register analyzer, dual IEEE-754 floating-point decomposition, and a bitwise logic laboratory.
+### High-Precision Number System, Arbitrary-Radix & Computer Arithmetic Suite
 
-All computation is performed in-memory on the client device using native JavaScript `BigInt` and typed arrays—ensuring zero external telemetry, zero latency, and 100% data privacy.
+*A zero-dependency, client-side engineering workstation for positional numeral systems (Bases 2–9999), IEEE-754 hardware floating-point decomposition, 64-bit register architecture, and step-by-step mathematical proofs.*
 
 ---
 
-## Architecture & Functional Modules
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-priince0.github.io%2FNumVex-2563EB?style=for-the-badge)](https://priince0.github.io/NumVex/)
+[![GitHub stars](https://img.shields.io/github/stars/priince0/NumVex?style=for-the-badge&color=F59E0B)](https://github.com/priince0/NumVex/stargazers)
+[![License: MIT](https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge)](LICENSE)
+[![Zero Dependencies](https://img.shields.io/badge/Dependencies-Zero%20(Pure%20ES6+)-8B5CF6?style=for-the-badge)]()
+[![Platform: Client-Side](https://img.shields.io/badge/Platform-100%25%20Private%20Client--Side-06B6D4?style=for-the-badge)]()
 
-### 1. OmniBase Real-Time Synchronizer
-- **Synchronized Bidirectional Input**: Real-time conversion across Binary, Octal, Decimal, Hexadecimal, RFC 4648 Base64, and Roman numerals.
-- **Arbitrary Radix Support**: Live translation into user-defined bases from 2 to 9999 with configurable bracketed digit notation ($[d_k]\dots[d_0]$).
-- **Arbitrary-Precision Integers**: Powered by ECMAScript `BigInt` arithmetic, eliminating integer overflow constraints up to system memory limits.
-- **Exact Fractional Expansion**: Handles fractional inputs with arbitrary-precision rational division and configurable precision limits.
+<br />
 
-### 2. High-Radix Processing Engine (Bases 2–9999)
-- **High Information Density**: Demonstrates higher-order positional notation where each digit position in Base 9999 carries $\log_2(9999) \approx 13.2877$ bits of entropy. A 64-bit unsigned integer ($18,446,744,073,709,551,615$) is fully represented in only 5 digits ($[1844][8584][8117][9279][2355]_{9999}$).
-- **Standardized Bracketed Representation**: Radices greater than 36 utilize standard bracketed positional notation ($[0]$ through $[R-1]$), preventing ambiguity between multi-character digits.
-- **Pre-Configured Computing Radices**:
-  - **Base 1000**: Metric thousand grouping ($10^3$).
-  - **Base 1024**: IEC binary kilo ($2^{10}$), aligning 10 bits per column.
-  - **Base 2048**: BIP-39 mnemonic lexicon space ($2^{11}$).
-  - **Base 3600**: Sexagesimal chrono-radix ($60^2$).
-  - **Base 4096**: Memory page boundary ($2^{12}$), mapping exactly three hexadecimal nibbles ($[000]-[FFF]$) per column.
-  - **Base 9999**: Tetradigital decimal ceiling ($10^4 - 1$).
+[**Explore Live Application »**](https://priince0.github.io/NumVex/)
 
-### 3. Step-by-Step Mathematical Derivations
-- **Polynomial Expansion**: Formulates base-to-decimal translations via explicit Horner-form and sum-of-weights notation:
-  $$\sum_{i=0}^{n-1} d_i \cdot b^i$$
-- **Repeated Division / Remainder Method**: Computes integer radix conversions with tabular quotients and remainders, recording both Forward and Reverse readouts.
-- **Power-of-Two Direct Grouping**: Visualizes direct bit-chunking for $2^k$ radices without intermediate base-10 conversion (Base 8 = 3 bits, Base 16 = 4 bits, Base 64 = 6 bits, Base 1024 = 10 bits, Base 4096 = 12 bits).
-- **RFC 4648 Base64 Grouping**: Demonstrates 24-bit (3-byte) buffer alignment into four 6-bit indices with standard padding rules (`=`, `==`).
-- **Export Formats**: One-click generation of formatted LaTeX ($\LaTeX$) source, Markdown tables, and structured plain-text calculation sheets.
+[Report Bug](https://github.com/priince0/NumVex/issues) • [Request Feature](https://github.com/priince0/NumVex/issues) • [View Derivation Engine](#-step-by-step-mathematical-derivation-engine)
 
-### 4. Hardware Bit Board & 64-Bit Register Architect
-- **Interactive Register Matrix**: Visual toggle array supporting 8-bit, 16-bit, 32-bit, and 64-bit register widths.
-- **Signed & Unsigned Encoding**: Real-time evaluation of Unsigned, Two's Complement, One's Complement, and Sign-Magnitude representations.
-- **Reflected Binary Gray Code**: Dynamic Gray code encoder/decoder ($G = B \oplus (B \gg 1)$) with single-bit transition verification.
-- **Binary-Coded Decimal (BCD)**: Live 8421 packed BCD translation with invalid pseudo-tetrad detection ($> 9$).
-- **Byte Order Visualization**: Immediate comparison between Big-Endian and Little-Endian memory layouts.
+</div>
 
-### 5. Dual-Precision IEEE-754 Floating-Point Analyzer
-- **Single (32-bit) and Double (64-bit) Precision**: Complete hardware-level decomposition:
-  - **Float32**: 1 Sign bit, 8 Exponent bits (Bias: 127), 23 Mantissa/Significand bits.
-  - **Float64**: 1 Sign bit, 11 Exponent bits (Bias: 1023), 52 Mantissa/Significand bits.
-- **Special Value Identification**: Automated detection and mathematical formula derivation for Normalized values, Subnormal/Denormal values, Positive Zero ($+0$), Negative Zero ($-0$), Positive/Negative Infinity ($\pm\infty$), and Not-a-Number (Quiet/Signaling NaN).
-
-### 6. Bitwise Operations Laboratory
-- **Interactive Logic Engine**: Supports two-operand operations (`AND`, `OR`, `XOR`, `NAND`, `NOR`, `XNOR`) and single-operand operations (`NOT`, Arithmetic Shift Left/Right, Logical Shift Right, Rotate Left/Right).
-- **Aligned Bitwise Inspector**: Displays operand registers vertically aligned bit-by-bit with individual gate truth evaluations.
+<br />
 
 ---
 
-## Technical Specifications
+## 🧭 System Architecture & Data Flow
 
-| Parameter | Specification |
-| :--- | :--- |
-| **Supported Base Range** | $2 \le \text{Base} \le 9999$ |
-| **Numeric Engine** | ECMAScript `BigInt` (arbitrary integer precision) |
-| **Float Standards** | IEEE 754-2008 (Single 32-bit, Double 64-bit) |
-| **Dependencies** | Zero external runtime dependencies; Lucide icons for UI symbols |
-| **Network Footprint** | 100% Client-Side; no analytics, no external telemetry, zero server round-trips |
-| **Theme Engine** | System-aware Dark / Light mode (CSS custom properties) |
+```
+                     ┌────────────────────────────────────────┐
+                     │          OmniBase Real-Time Hub        │
+                     │  (Arbitrary-Precision BigInt Engine)   │
+                     └───────────────────┬────────────────────┘
+                                         │
+        ┌────────────────────────────────┼────────────────────────────────┐
+        ▼                                ▼                                ▼
+┌────────────────┐              ┌────────────────┐              ┌────────────────┐
+│ Standard Bases │              │  Radix Engine  │              │ Computer Logic │
+│ • Binary (b2)  │              │ • Bases 2–9999 │              │ • IEEE-754 FP  │
+│ • Octal (b8)   │              │ • Bracketed [] │              │ • 64b Register │
+│ • Decimal (b10)│              │ • Exact Horner │              │ • Gray / BCD   │
+│ • Hex (b16)    │              │ • IEC Kibi/MiB │              │ • Bitwise Lab  │
+│ • Base64 / RFC │              │ • Page Radices │              │ • ASCII Matrix │
+└───────┬────────┘              └────────┬───────┘              └────────┬───────┘
+        │                                │                               │
+        └────────────────────────────────┼───────────────────────────────┘
+                                         ▼
+                     ┌────────────────────────────────────────┐
+                     │       LaTeX & Markdown Derivations     │
+                     │     Print / Homework Export Ready      │
+                     └────────────────────────────────────────┘
+```
 
 ---
 
-## Getting Started
+## ✨ Key Capabilities
 
-### Local Execution
+| Module | Core Capability | Highlights |
+| :--- | :--- | :--- |
+| **🌐 OmniBase Hub** | Unified bidirectional conversion | Arbitrary `BigInt`, exact fraction expansion, quick-copy ticks, smooth horizontal pan |
+| **🪐 Arbitrary Radix** | Bases **2 through 9999** | Standardized bracket notation $[d_k]...[d_0]$, metric ($10^3$), IEC ($2^{10}$), page radices ($2^{12}$) |
+| **📐 Math Explainer** | Step-by-step calculation proofs | Polynomial Horner expansions, tabular repeated division, direct $2^k$ chunking |
+| **🔬 IEEE-754 Lab** | Float32 & Float64 analyzer | Hardware-level Sign, Biased Exponent, and Significand; detects Subnormal, $\pm0$, $\pm\infty$, NaN |
+| **🎛️ 64-Bit Register** | Interactive bit board & architect | Clickable toggles (8/16/32/64b), Two's Complement, Gray Code ($G = B \oplus (B \gg 1)$), BCD 8421 |
+| **⚡ Bitwise Lab** | Multi-gate aligned truth viewer | Vertical bit alignment for `AND`, `OR`, `XOR`, `NOT`, `NAND`, `NOR`, `XNOR`, and Shifts |
+| **🔤 ASCII Matrix** | 128-entry character reference | Dec, Hex, Oct, Bin, Symbol, Name, and functional descriptions with real-time search |
 
-NumVex is composed of static HTML, CSS, and vanilla ES6+ modules. It can be served using any local web server:
+---
+
+## 🚀 Deep-Dive Modules
+
+### 🌐 1. OmniBase Real-Time Synchronizer
+- **Instant Reactive Sync**: Editing any numeral representation immediately recalculates all complementary formats without race conditions or input jitter.
+- **Unbounded Integer Precision**: Powered by native JavaScript `BigInt`, allowing numbers with dozens of decimal digits without precision loss or truncation.
+- **Large-Number UX**:
+  - ↔️ **Horizontal Mouse-Wheel Slide**: Smoothly glide through 64-bit or 128-bit bitstreams.
+  - ‹ › **Edge Jump Arrows**: One-click jump to Most Significant Bit (MSB) or Least Significant Bit (LSB).
+  - 📋 **In-Place Confirmation**: Copy buttons morph into a checkmark (`✓`) with a subtle pulse.
+  - 💡 **Magnitude Badges**: Automatic scale annotation (e.g., `≈ 1 Million`, `≈ 18.45 Quintillion`, `UINT64 MAX`).
+
+---
+
+### 🪐 2. Arbitrary-Radix Spectrum (Bases 2–9999)
+- **High-Density Positional Notation**: In Base 9999, each digit carries $\log_2(9999) \approx 13.2877$ bits of information. A 64-bit integer requires only 5 digits.
+- **Standardized Bracketed Representation**: Radices beyond Base 36 utilize standard mathematical bracketed notation ($[0]$ through $[R-1]$), preventing ambiguity between multi-character digits.
+- **Pre-Configured Architecture Benchmarks**:
+  - `Base 1000` — Metric decimal thousand ($10^3$)
+  - `Base 1024` — Binary Kibi ($2^{10}$), aligning 10 raw bits per column
+  - `Base 2048` — BIP-39 mnemonic lexicon space ($2^{11}$)
+  - `Base 3600` — Astronomical sexagesimal chrono-radix ($60^2$)
+  - `Base 4096` — Hardware memory page radix ($2^{12} = 4096$), exactly three hexadecimal nibbles ($[000]-[FFF]$)
+  - `Base 9999` — Tetradigital decimal boundary
+
+---
+
+### 📐 3. Step-by-Step Mathematical Derivation Engine
+
+> [!NOTE]
+> Every calculation provides human-readable mathematical proofs formatted for academic coursework, technical reports, and printouts.
+
+- **Polynomial Expansion Method**:
+  $$\text{Value} = \sum_{i=0}^{n-1} d_i \cdot b^i = d_{n-1} b^{n-1} + \dots + d_1 b^1 + d_0 b^0$$
+- **Repeated Division / Remainder Method**:
+  Visualizes integer radix transitions through structured division tables tracking intermediate quotients and remainders (with both Forward and Reverse readouts).
+- **Direct Power-of-Two Bit Grouping**:
+  Avoids base-10 intermediate hops by slicing binary streams directly into power-of-two clusters:
+  - **Base 8 (Octal)**: 3-bit clusters
+  - **Base 16 (Hex)**: 4-bit nibbles
+  - **Base 64 (RFC 4648)**: 6-bit sextets with `=`/`==` padding
+  - **Base 1024**: 10-bit chunks
+  - **Base 4096**: 12-bit blocks
+- **Academic Export**: One-click export for **LaTeX source code** ($\LaTeX$) and **Markdown tables**, with `@media print` optimized styling for physical reports.
+
+---
+
+### 🔬 4. Dual IEEE-754 Floating-Point Laboratory
+
+Visualizes physical IEEE 754-2008 memory layouts:
+
+```
+Float32 (Single Precision, 32-bit):
+┌───┬──────────────┬─────────────────────────────────────────────────┐
+│ S │  8-bit Exp   │                 23-bit Mantissa                 │
+└───┴──────────────┴─────────────────────────────────────────────────┘
+ 31  30          23 22                                              0
+
+Float64 (Double Precision, 64-bit):
+┌───┬───────────────────┬────────────────────────────────────────────┐
+│ S │    11-bit Exp     │               52-bit Mantissa              │
+└───┴───────────────────┴────────────────────────────────────────────┘
+ 63  62               52 51                                         0
+```
+
+- **Color-Coded Hardware Breakdown**:
+  - 🟥 **Sign ($S$)**: $0 = \text{Positive}$, $1 = \text{Negative}$
+  - 🟩 **Biased Exponent ($E$)**: Raw exponent with bias adjustment (Bias 127 for Float32, Bias 1023 for Float64)
+  - 🟦 **Mantissa / Significand ($M$)**: Stored fraction with implicit hidden bit ($1.M$)
+- **Automated Condition Detection**:
+  - Normalized Numbers: $(-1)^S \times 2^{E - \text{Bias}} \times (1 + M)$
+  - Subnormal / Denormal Numbers: $(-1)^S \times 2^{1 - \text{Bias}} \times (0 + M)$
+  - Zero Representation ($+0.0$ and $-0.0$)
+  - Infinities ($+\infty$ and $-\infty$)
+  - Not-a-Number (Quiet NaN / Signaling NaN)
+
+---
+
+### 🎛️ 5. 64-Bit Register Architect & Logic Lab
+- **Interactive Switch Matrix**: Click individual bits to toggle states across 8, 16, 32, or 64-bit word lengths.
+- **Signed Arithmetic Interpretations**:
+  - **Unsigned Integer**: Standard binary magnitude
+  - **Two's Complement**: Hardware standard signed arithmetic ($N = -b_{n-1} 2^{n-1} + \sum_{i=0}^{n-2} b_i 2^i$)
+  - **One's Complement & Sign-Magnitude**: Classic historical signed formats
+- **Digital Logic Decoders**:
+  - **Gray Code**: Reflected binary encoding ($G = B \oplus (B \gg 1)$) preventing race conditions during physical encoder transitions.
+  - **BCD (8421)**: Binary-Coded Decimal validator with illegal state detection ($1010_2$ to $1111_2$).
+  - **Endianness**: Big-Endian vs. Little-Endian memory byte alignment.
+
+---
+
+## 🔒 Security & Privacy Guarantee
+
+> [!IMPORTANT]
+> **Zero Network Telemetry**: NumVex is strictly client-side.
+> - No tracking scripts, analytics cookies, or external server pings.
+> - No user input leaves your browser session.
+> - Operates seamlessly offline.
+
+---
+
+## 💻 Quick Start
+
+### 🌐 Direct Browser Access
+Visit the hosted instance: **[https://priince0.github.io/NumVex/](https://priince0.github.io/NumVex/)**
+
+### 🖥️ Local Setup
+Clone and serve the repository using any static web server:
 
 ```bash
-# Clone the repository
+# 1. Clone repository
 git clone https://github.com/priince0/NumVex.git
 cd NumVex
 
-# Start a local static file server (Python 3)
+# 2. Run local HTTP server (Python 3)
 python3 -m http.server 8080
-```
 
-Open `http://localhost:8080` in any modern web browser.
-
-Alternatively, you can open `index.html` directly:
-```bash
-# macOS
-open index.html
-
-# Linux
-xdg-open index.html
-
-# Windows
-start index.html
+# 3. Open in browser
+open http://localhost:8080
 ```
 
 ---
 
-## Directory Structure
+## 📁 Repository Structure
 
-```text
+```
 NumVex/
-├── index.html            # Core application layout and semantic markup
+├── index.html            # Semantic HTML5 layout and accessibility markup
 ├── css/
-│   └── style.css         # Modern responsive design and design tokens
+│   └── style.css         # Glassmorphism design system, CSS variables, print styles
 ├── js/
-│   ├── app.js            # UI controller, event delegation, and state synchronization
-│   ├── converter.js      # Core arithmetic engine (BigInt, arbitrary radix, IEEE-754)
-│   └── steps.js          # Mathematical proof generator and LaTeX exporter
-├── .gitignore            # Version control exclusion rules
-└── README.md             # Technical documentation and specifications
+│   ├── app.js            # UI controller, state sync, and keyboard shortcuts
+│   ├── converter.js      # Core BigInt, arbitrary-radix, and IEEE-754 algorithms
+│   └── steps.js          # Formal derivation generator and LaTeX/Markdown exporter
+├── .gitignore            # Git exclusion rules
+├── LICENSE               # MIT Open Source License
+└── README.md             # Project documentation
 ```
 
 ---
 
-## License
+## 📄 License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is open-source under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+
+Made with precision by **[Prince Rabadiya](https://github.com/priince0)**
+
+⭐ **If you find NumVex useful, please consider starring the repository!**
+
+</div>
